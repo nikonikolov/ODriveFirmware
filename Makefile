@@ -76,6 +76,8 @@ C_SOURCES = \
   Src/usbd_conf.c \
   MotorControl/utils.c \
   MotorControl/low_level.c  
+## Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c \
+
 ASM_SOURCES = \
   Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f405xx.s
 
@@ -95,7 +97,7 @@ BIN = $(CP) -O binary -S
 #######################################
 # macros for gcc
 AS_DEFS =
-C_DEFS = -D"__weak=__attribute__((weak))" -D"__packed=__attribute__((__packed__))" -DUSE_HAL_DRIVER -DSTM32F405xx
+C_DEFS = -D__weak="__attribute__((weak))" -D__packed="__attribute__((__packed__))" -DUSE_HAL_DRIVER -DSTM32F405xx
 # includes for gcc
 AS_INCLUDES =
 C_INCLUDES = -IInc

@@ -747,7 +747,14 @@ void motor_thread(void const * argument) {
 
     //Only run tests on M0 for now
     if (motor == &motors[1]) {
-        FOC_voltage_loop(motor, 0.0f, 0.0f);
+        // FOC_voltage_loop(motor, 0.0f, 0.0f);
+        while (1) {
+            // uint8_t HiMsg[] = "hello\r\n";
+            // CDC_Transmit_FS(HiMsg, strlen(HiMsg));
+            // HAL_Delay(200);
+        }
+    } else {
+    	while (1);
     }
 
     //Calculate current control gains

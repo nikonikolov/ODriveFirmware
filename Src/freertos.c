@@ -112,7 +112,6 @@ void StartDefaultTask(void const * argument)
   MX_USB_DEVICE_Init();
 
   /* USER CODE BEGIN StartDefaultTask */
-
   // Init motor control
   init_motor_control();
 

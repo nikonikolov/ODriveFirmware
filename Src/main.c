@@ -52,7 +52,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "usb_device.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -112,8 +112,6 @@ int main(void)
   //Required to use OC4 for ADC triggering.
   OC4_PWM_Override(&htim1);
   OC4_PWM_Override(&htim8);
-
-  /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
   MX_FREERTOS_Init();
