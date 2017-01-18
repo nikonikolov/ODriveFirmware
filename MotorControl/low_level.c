@@ -740,6 +740,16 @@ void motor_thread(void const * argument) {
     motor->motor_thread = osThreadGetId();
     motor->thread_ready = true;
 
+    //Only run tests on M0 for now
+	if (motor == &motors[1]) {
+		// FOC_voltage_loop(motor, 0.0f, 0.0f);
+		FOC_voltage_loop(motor, 0.0f, 0.8f);
+	} else {
+		FOC_voltage_loop(motor, 0.0f, 0.8f);
+	}
+
+
+
     float test_current = 4.0f;
     float R = measure_phase_resistance(motor, test_current, 1.0f);
     float L = measure_phase_inductance(motor, -1.0f, 1.0f);

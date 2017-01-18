@@ -48,6 +48,9 @@
 
 /* USER CODE BEGIN Includes */     
 #include "low_level.h"
+#include <stdint.h>
+
+
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
@@ -110,6 +113,14 @@ void StartDefaultTask(void const * argument)
 {
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
+  HAL_Delay(10000);
+
+
+  while (1) {
+    uint8_t message[] = "hello\n";
+    CDC_Transmit_FS(message, (uint16_t) strlen(message));
+    HAL_Delay(1000);
+  }
 
   /* USER CODE BEGIN StartDefaultTask */
   // Init motor control
