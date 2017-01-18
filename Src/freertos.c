@@ -58,8 +58,11 @@ osThreadId defaultTaskHandle;
 
 /* USER CODE BEGIN Variables */
 
+void usb_cdc_thread (void const * unused_argument);
+
 osThreadDef(task_motor_0, motor_thread, osPriorityHigh+1, 0, 512);
 osThreadDef(task_motor_1, motor_thread, osPriorityHigh, 0, 512);
+
 
 /* USER CODE END Variables */
 
@@ -112,23 +115,18 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void const * argument)
 {
   /* init code for USB_DEVICE */
-  MX_USB_DEVICE_Init();
-  HAL_Delay(10000);
-
-
-  while (1) {
-    uint8_t message[] = "hello\n";
-    CDC_Transmit_FS(message, (uint16_t) strlen(message));
-    HAL_Delay(1000);
-  }
+  // MX_USB_DEVICE_Init();
 
   /* USER CODE BEGIN StartDefaultTask */
   // Init motor control
   init_motor_control();
 
   // Start motor threads
-  osThreadCreate(osThread(task_motor_0), &motors[0]);
-  osThreadCreate(osThread(task_motor_1), &motors[1]);
+  // osThreadCreate(osThread(task_motor_0), &motors[0]);
+  // osThreadCreate(osThread(task_motor_1), &motors[1]);
+  osThreadDef(task_usb_cdc, usb_cdc_thread, osPriorityHigh, 0, 512);
+  osThreadCreate(osThread(task_usb_cdc), NULL);
+
 
   //If we get to here, then the default task is done.
   vTaskDelete(defaultTaskHandle);
@@ -138,6 +136,14 @@ void StartDefaultTask(void const * argument)
 
 /* USER CODE BEGIN Application */
      
+
+void usb_cdc_thread (void const * unused_argument) {
+	MX_USB_DEVICE_Init();
+	while (1) {
+
+	}
+}
+
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
