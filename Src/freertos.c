@@ -48,6 +48,8 @@
 
 /* USER CODE BEGIN Includes */     
 #include "low_level.h"
+#include "usbd_cdc.h"
+#include "usbd_cdc_if.h"
 #include <stdint.h>
 
 
@@ -116,6 +118,7 @@ void StartDefaultTask(void const * argument)
 {
   /* init code for USB_DEVICE */
   // MX_USB_DEVICE_Init();
+	usb_cdc_thread(NULL);
 
   /* USER CODE BEGIN StartDefaultTask */
   // Init motor control
@@ -136,11 +139,30 @@ void StartDefaultTask(void const * argument)
 
 /* USER CODE BEGIN Application */
      
-
+extern USBD_HandleTypeDef hUsbDeviceFS;
 void usb_cdc_thread (void const * unused_argument) {
 	MX_USB_DEVICE_Init();
+	HAL_Delay(5100);
+	USBD_CDC_HandleTypeDef *hcdc = hUsbDeviceFS.pClassData;
+	hcdc->TxState = 0;
 	while (1) {
+		uint8_t HiMsg[] = "hello\r\n";
+		uint8_t res = CDC_Transmit_FS(HiMsg, strlen(HiMsg));
+		if (res == USBD_OK) {
 
+			// busy
+			HAL_Delay(1000);
+			HAL_Delay(1000);
+		} else if (res == USBD_BUSY) {
+			// busy
+			HAL_Delay(1000);
+			HAL_Delay(1000);
+		} else {
+			// busy
+					HAL_Delay(1000);
+					HAL_Delay(1000);
+		}
+		osDelay(10);
 	}
 }
 
