@@ -64,6 +64,7 @@ void usb_cdc_thread (void const * unused_argument);
 
 osThreadDef(task_motor_0, motor_thread, osPriorityHigh+1, 0, 512);
 osThreadDef(task_motor_1, motor_thread, osPriorityHigh, 0, 512);
+osThreadDef(task_usb_cdc, usb_cdc_thread, osPriorityHigh, 0, 512);
 
 
 /* USER CODE END Variables */
@@ -117,17 +118,17 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void const * argument)
 {
   /* init code for USB_DEVICE */
-  // MX_USB_DEVICE_Init();
-	usb_cdc_thread(NULL);
+  MX_USB_DEVICE_Init();
 
   /* USER CODE BEGIN StartDefaultTask */
   // Init motor control
   init_motor_control();
 
   // Start motor threads
+
   // osThreadCreate(osThread(task_motor_0), &motors[0]);
   // osThreadCreate(osThread(task_motor_1), &motors[1]);
-  osThreadDef(task_usb_cdc, usb_cdc_thread, osPriorityHigh, 0, 512);
+
   osThreadCreate(osThread(task_usb_cdc), NULL);
 
 
@@ -141,27 +142,8 @@ void StartDefaultTask(void const * argument)
      
 extern USBD_HandleTypeDef hUsbDeviceFS;
 void usb_cdc_thread (void const * unused_argument) {
-	MX_USB_DEVICE_Init();
-	HAL_Delay(5100);
-	USBD_CDC_HandleTypeDef *hcdc = hUsbDeviceFS.pClassData;
-	hcdc->TxState = 0;
+	osDelay(5100);
 	while (1) {
-		uint8_t HiMsg[] = "hello\r\n";
-		uint8_t res = CDC_Transmit_FS(HiMsg, strlen(HiMsg));
-		if (res == USBD_OK) {
-
-			// busy
-			HAL_Delay(1000);
-			HAL_Delay(1000);
-		} else if (res == USBD_BUSY) {
-			// busy
-			HAL_Delay(1000);
-			HAL_Delay(1000);
-		} else {
-			// busy
-					HAL_Delay(1000);
-					HAL_Delay(1000);
-		}
 		osDelay(10);
 	}
 }
